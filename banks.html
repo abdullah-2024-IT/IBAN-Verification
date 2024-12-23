@@ -101,9 +101,9 @@
         function checkIban() {
             let ibanInput = document.getElementById('ibanInput').value.trim();
 
-            // التحقق من وجود SA في البداية
+            // إزالة "SA" إذا كانت موجودة
             if (ibanInput.startsWith('SA')) {
-                ibanInput = ibanInput.substring(2); // إزالة SA إذا كانت موجودة
+                ibanInput = ibanInput.substring(2);
             }
 
             // التحقق من صحة الطول وصيغة الأيبان
