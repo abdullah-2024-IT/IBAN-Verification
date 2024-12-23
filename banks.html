@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>فحص الأيبان</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #b3d9d9;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            background-color: #d3e9e9;
+            border-radius: 10px;
+            padding: 20px 30px;
+            width: 400px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            margin-bottom: 20px;
+            color: #3d5672;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            background-color: #4caf50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .result {
+            margin-top: 20px;
+            text-align: center;
+            color: #3d5672;
+        }
+        table {
+            width: 100%;
+            margin-top: 10px;
+            border-collapse: collapse;
+        }
+        table, th, td {
+            border: 1px solid #ccc;
+        }
+        th, td {
+            padding: 10px;
+            text-align: center;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>فحص الأيبان</h1>
+        <input type="text" id="ibanInput" placeholder="ادخل الأيبان (مع أو بدون SA)">
+        <button onclick="checkIban()">افحص</button>
+        <div class="result" id="result"></div>
+    </div>
+
+    <script>
+        const banks = [
+            { 'samaCode': '55', 'nameAr': 'البنك السعودي الفرنسي' },
+            { 'samaCode': '80', 'nameAr': 'بنك الراجحي' },
+            { 'samaCode': '10', 'nameAr': 'البنك الأهلي التجاري' },
+            { 'samaCode': '45', 'nameAr': 'ساب' },
+            { 'samaCode': '20', 'nameAr': 'بنك الرياض' },
+            { 'samaCode': '40', 'nameAr': 'سامبا' },
+            { 'samaCode': '05', 'nameAr': 'بنك الانماء' },
+            { 'samaCode': '50', 'nameAr': 'البنك الأول' },
+            { 'samaCode': '60', 'nameAr': 'بنك الجزيرة' },
+            { 'samaCode': '65', 'nameAr': 'البنك السعودي للاستثمار' },
+            { 'samaCode': '15', 'nameAr': 'بنك البلاد' },
+            { 'samaCode': '30', 'nameAr': 'البنك العربي الوطني' },
+            { 'samaCode': '90', 'nameAr': 'بنك الخليج' },
+            { 'samaCode': '95', 'nameAr': 'بنك الإمارات' },
+            { 'samaCode': '76', 'nameAr': 'بنك مسقط' },
+            { 'samaCode': '71', 'nameAr': 'بنك البحرين الوطني' },
+            { 'samaCode': '75', 'nameAr': 'بنك الكويت الوطني' },
+            { 'samaCode': '85', 'nameAr': 'بي ان بي باريبوس' }
+        ];
+
+        function checkIban() {
+            let ibanInput = document.getElementById('ibanInput').value.trim();
+
+            // التحقق من وجود SA في البداية
+            if (ibanInput.startsWith('SA')) {
+                ibanInput = ibanInput.substring(2); // إزالة SA إذا كانت موجودة
+            }
+
+            // التحقق من صحة الطول وصيغة الأيبان
+            if (ibanInput.length !== 22 || isNaN(ibanInput)) {
+                displayInvalidResult();
+                return;
+            }
+
+            const samaCode = ibanInput.substring(0, 2); // استخراج الكود من الأيبان
+            const bank = banks.find(bank => bank.samaCode === samaCode);
+
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = ''; // مسح النتيجة السابقة
+
+            if (bank) {
+                resultDiv.innerHTML = `
+                    <table>
+                        <tr>
+                            <th>الحالة</th>
+                            <td>الأيبان صحيح</td>
+                        </tr>
+                        <tr>
+                            <th>اسم البنك</th>
+                            <td>${bank.nameAr}</td>
+                        </tr>
+                        <tr>
+                            <th>الرمز (SAMA Code)</th>
+                            <td>${bank.samaCode}</td>
+                        </tr>
+                    </table>
+                `;
+            } else {
+                displayInvalidResult();
+            }
+        }
+
+        function displayInvalidResult() {
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = `
+                <table>
+                    <tr>
+                        <th>الحالة</th>
+                        <td>الأيبان غير صحيح</td>
+                    </tr>
+                </table>
+            `;
+        }
+    </script>
+</body>
+</html>
